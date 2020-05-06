@@ -1,8 +1,3 @@
-%{
-#include <stdio.h>
-#include "simple.tab.h"
-%}
-
 %option yylineno
 ENTERO [0-9]+|%[xX][0-9a-fA-F]+|%[oO][0-7]+
 ID [_]?[a-zA-Z0-9]+([_a-zA-Z0-9]+)?
@@ -13,50 +8,25 @@ REAL_O %[oO]([0-7]+)?(\.)([0-7]+)(\^[+-]?[0-7]+)?
 REAL_X %[xX]([0-9a-fA-F]+)?((\.)[0-9a-fA-F]+)?(\^[+-]?[0-9a-fA-F]+)?
 REAL_ENT ([0-9]+)?(\.)?[0-9]+(\^[+-]?[0-9]+)?
 CADENA \"(\\.|[^"\’])*\"
-CARACTER ’(%(’|\"|%|n|r|t))’|’(%[oO][0-7]+)’|’(%(x|X)[0-9a-fA-F]+)’|’([%]?[0-2][0-5]?[0-5]?)’|’([a-z0-9])’
+CARACTER ’(%(’|\"|%|n|r|t))’|’(%(o|O)[0-3][0-7][0-7])’|’(%(x|X)[0-9a-fA-F]+)’|’([%][0-2]?[0-5]?[0-5]?)’|’([a-z0-9])’
 
 %%
 
-{CARACTER} {printf( "linea %d, caracter: %s\n", yylineno, yytext );
-            return (CTC_CARACTER);
-           }
-           
-{ENTERO} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );
-            return (CTC_ENTERA);
-         }
-         
-{REAL_O} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return (CTC_REAL);
-         }
-         
-{REAL_X} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return (CTC_REAL);
-         }
-         
-{REAL_ENT} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return (CTC_REAL);
-           }
-           
-{OPERADOR} {printf( "linea %d, operador: %s\n", yylineno, yytext );
-            return (yytext[0]);
-           }
-           
-{DELIM} {printf( "linea %d, delimitador: %s\n", yylineno, yytext );
-            return (yytext[0]);
-        }
-        
+##.+      ;
+\#.*[\n]?.*\}   ;
+{CARACTER} printf( "linea %d, caracter: %s\n", yylineno, yytext );
+{ENTERO} printf( "linea %d, ctc entera: %s\n", yylineno, yytext );
+{REAL_O} printf( "linea %d, ctc real: %s\n", yylineno, yytext );
+{REAL_X} printf( "linea %d, ctc real: %s\n", yylineno, yytext );
+{REAL_ENT} printf( "linea %d, ctc real: %s\n", yylineno, yytext );
+{OPERADOR} printf( "linea %d, operador: %s\n", yylineno, yytext );
+{DELIM} printf( "linea %d, delimitador: %s\n", yylineno, yytext );
 {RESERVADA} printf( "linea %d, palabra reservada: %s\n", yylineno, yytext );
-
-{ID} {printf( "linea %d, identificador: %s\n", yylineno, yytext );
-        return (IDENTIFICADOR);
-     }
-     
-{CADENA} {printf( "linea %d, cadena: %s\n", yylineno, yytext );
-            return (CTC_CADENA);
-         }
+{ID} printf( "linea %d, identificador: %s\n", yylineno, yytext );
+{CADENA} printf( "linea %d, cadena: %s\n", yylineno, yytext );
 (\t|" ")+    ;
 \n { }
-.                                        printf ("linea %d, ERROR\n",linea);
+. printf( "linea %d, ERROR: carácter no reconocido: %s\n", yylineno, yytext );
 
 %%
 
