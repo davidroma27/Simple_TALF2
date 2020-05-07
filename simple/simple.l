@@ -18,7 +18,7 @@ CARACTER ’(%(’|\"|%|n|r|t))’|’(%[oO][0-7]+)’|’(%(x|X)[0-9a-fA-F]+)�
 %%
 
 {CARACTER} {printf( "linea %d, caracter: %s\n", yylineno, yytext );
-            return (CTC_CARACTER);
+            return (yytext[0]);
            }
            
 {ENTERO} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );
