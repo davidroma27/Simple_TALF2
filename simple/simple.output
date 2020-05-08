@@ -1,0 +1,325 @@
+No terminales inútiles en la gramática
+
+   literal
+   visibilidad
+   modificador
+   modo
+   tipo_basico
+   longitud
+
+
+Terminales no usados en la gramática
+
+   OR
+   AND
+   NEG
+   '<'
+   '>'
+   LEQ
+   GEQ
+   EQ
+   NEQ
+   DESPI
+   DESPD
+   '+'
+   '-'
+   '*'
+   '/'
+   '\\'
+   '^'
+   INC
+   DEC
+   MENOS_UNARIO
+   ABSTRACTO
+   BOOLEANO
+   BUCLE
+   CASOS
+   CLASE
+   COMO
+   CONSTANTE
+   CONSTRUCTOR
+   CORTO
+   CUANDO
+   DE
+   DESCENDENTE
+   DESTRUCTOR
+   DEVOLVER
+   DICCIONARIO
+   EN
+   ENTERO
+   ENTONCES
+   ENUMERACION
+   ES
+   ESPECIFICO
+   EXCEPCION
+   EXPORTAR
+   FALSO
+   FINAL
+   FINALMENTE
+   GENERICO
+   IMPORTAR
+   LARGO
+   LANZA
+   LIBRERIA
+   LISTA
+   MIENTRAS
+   OBJETO
+   OTRO
+   PARA
+   PRINCIPIO
+   PRIVADO
+   PROTEGIDO
+   PRUEBA
+   PUBLICO
+   RANGO
+   REAL
+   REFERENCIA
+   REGISTRO
+   REPETIR
+   SALIR
+   SI
+   SIGNO
+   SIGUIENTE
+   SINO
+   SUBPROGRAMA
+   TABLA
+   TIPO
+   ULTIMA
+   VALOR
+   VERDADERO
+   CTC_CADENA
+   DOS_PUNTOS
+   CUATRO_PUNTOS
+   ASIGNACION
+   FLECHA
+   ASIG_SUMA
+   ASIG_RESTA
+   ASIG_MULT
+   ASIG_DIV
+   ASIG_RESTO
+   ASIG_POT
+   ASIG_DESPI
+   ASIG_DESPD
+   CTC_CARACTER
+   CTC_ENTERA
+   CTC_REAL
+   OPERADOR
+   DELIM
+   RESERVADA
+
+
+Reglas inútiles en la gramática
+
+    3 literal: CTC_REAL
+    4        | CTC_ENTERA
+    5        | CTC_CADENA
+    6        | CTC_CARACTER
+    7        | VERDADERO
+    8        | FALSO
+
+    9 visibilidad: PUBLICO
+   10            | PROTEGIDO
+   11            | PRIVADO
+
+   12 modificador: CONSTRUCTOR
+   13            | DESTRUCTOR
+   14            | GENERICO
+   15            | ABSTRACTO
+   16            | ESPECIFICO
+   17            | FINAL
+
+   18 modo: VALOR
+   19     | REFERENCIA
+
+   20 tipo_basico: BOOLEANO
+   21            | CTC_CARACTER
+   22            | ENTERO
+   23            | REAL
+
+   24 longitud: CORTO
+   25         | LARGO
+
+
+Gramática
+
+    0 $accept: definicion_programa $end
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN
+
+    2 codigo_programa: %empty
+
+
+Terminales con las reglas donde aparecen
+
+$end (0) 0
+'*' (42)
+'+' (43)
+'-' (45)
+'/' (47)
+';' (59) 1
+'<' (60)
+'>' (62)
+'\\' (92)
+'^' (94)
+error (256)
+OR (258)
+AND (259)
+NEG (260)
+LEQ (261)
+GEQ (262)
+EQ (263)
+NEQ (264)
+DESPI (265)
+DESPD (266)
+INC (267)
+DEC (268)
+MENOS_UNARIO (269)
+ABSTRACTO (270)
+BOOLEANO (271)
+BUCLE (272)
+CASOS (273)
+CLASE (274)
+COMO (275)
+CONSTANTE (276)
+CONSTRUCTOR (277)
+CORTO (278)
+CUANDO (279)
+DE (280)
+DESCENDENTE (281)
+DESTRUCTOR (282)
+DEVOLVER (283)
+DICCIONARIO (284)
+EN (285)
+ENTERO (286)
+ENTONCES (287)
+ENUMERACION (288)
+ES (289)
+ESPECIFICO (290)
+EXCEPCION (291)
+EXPORTAR (292)
+FALSO (293)
+FIN (294) 1
+FINAL (295)
+FINALMENTE (296)
+GENERICO (297)
+IMPORTAR (298)
+LARGO (299)
+LANZA (300)
+LIBRERIA (301)
+LISTA (302)
+MIENTRAS (303)
+OBJETO (304)
+OTRO (305)
+PARA (306)
+PRINCIPIO (307)
+PRIVADO (308)
+PROGRAMA (309) 1
+PROTEGIDO (310)
+PRUEBA (311)
+PUBLICO (312)
+RANGO (313)
+REAL (314)
+REFERENCIA (315)
+REGISTRO (316)
+REPETIR (317)
+SALIR (318)
+SI (319)
+SIGNO (320)
+SIGUIENTE (321)
+SINO (322)
+SUBPROGRAMA (323)
+TABLA (324)
+TIPO (325)
+ULTIMA (326)
+VALOR (327)
+VERDADERO (328)
+CTC_CADENA (329)
+IDENTIFICADOR (330) 1
+DOS_PUNTOS (331)
+CUATRO_PUNTOS (332)
+ASIGNACION (333)
+FLECHA (334)
+ASIG_SUMA (335)
+ASIG_RESTA (336)
+ASIG_MULT (337)
+ASIG_DIV (338)
+ASIG_RESTO (339)
+ASIG_POT (340)
+ASIG_DESPI (341)
+ASIG_DESPD (342)
+CTC_CARACTER (343)
+CTC_ENTERA (344)
+CTC_REAL (345)
+OPERADOR (346)
+DELIM (347)
+RESERVADA (348)
+
+
+No terminales con las reglas donde aparecen
+
+$accept (103)
+    en la izquierda: 0
+definicion_programa (104)
+    en la izquierda: 1, en la derecha: 0
+codigo_programa (105)
+    en la izquierda: 2, en la derecha: 1
+
+
+Estado 0
+
+    0 $accept: . definicion_programa $end
+
+    PROGRAMA  desplazar e ir al estado 1
+
+    definicion_programa  ir al estado 2
+
+
+Estado 1
+
+    1 definicion_programa: PROGRAMA . IDENTIFICADOR ';' codigo_programa FIN
+
+    IDENTIFICADOR  desplazar e ir al estado 3
+
+
+Estado 2
+
+    0 $accept: definicion_programa . $end
+
+    $end  desplazar e ir al estado 4
+
+
+Estado 3
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR . ';' codigo_programa FIN
+
+    ';'  desplazar e ir al estado 5
+
+
+Estado 4
+
+    0 $accept: definicion_programa $end .
+
+    $default  aceptar
+
+
+Estado 5
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR ';' . codigo_programa FIN
+
+    $default  reduce usando la regla 2 (codigo_programa)
+
+    codigo_programa  ir al estado 6
+
+
+Estado 6
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa . FIN
+
+    FIN  desplazar e ir al estado 7
+
+
+Estado 7
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN .
+
+    $default  reduce usando la regla 1 (definicion_programa)
