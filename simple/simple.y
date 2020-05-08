@@ -1,7 +1,8 @@
- 
+
 %{
 
   #include <stdio.h>
+
   extern FILE *yyin;
   extern int yylex();
 
@@ -309,8 +310,6 @@ expresion_condicional: expresion
 clave_valor: CTC_CADENA "=>" expresion ;
 
 campo_valor: IDENTIFICADOR "=>" expresion ;
-
-
 
 expresion_condicional: expresion
             | SI expresion ENTONCES expresion '[' SINO expresion ']''?'
