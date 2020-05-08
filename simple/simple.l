@@ -42,8 +42,6 @@ CARACTER '(%['"%nrt])'|'(%[oO][0-7]+)'|'(%(x|X)[0-9a-fA-F]+)'|'([%][0-2]?[0-5]?[
 {DELIM} {printf( "linea %d, delimitador: %s\n", yylineno, yytext );
             return DELIM;
         }
-        
-programa { return PROGRAMA;}
 
 {RESERVADA} {printf( "linea %d, palabra reservada: %s\n", yylineno, yytext );
             return RESERVADA;

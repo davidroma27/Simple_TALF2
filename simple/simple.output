@@ -110,34 +110,34 @@ Terminales no usados en la gramática
 
 Reglas inútiles en la gramática
 
-    3 literal: CTC_REAL
-    4        | CTC_ENTERA
-    5        | CTC_CADENA
-    6        | CTC_CARACTER
-    7        | VERDADERO
-    8        | FALSO
+    4 literal: CTC_REAL
+    5        | CTC_ENTERA
+    6        | CTC_CADENA
+    7        | CTC_CARACTER
+    8        | VERDADERO
+    9        | FALSO
 
-    9 visibilidad: PUBLICO
-   10            | PROTEGIDO
-   11            | PRIVADO
+   10 visibilidad: PUBLICO
+   11            | PROTEGIDO
+   12            | PRIVADO
 
-   12 modificador: CONSTRUCTOR
-   13            | DESTRUCTOR
-   14            | GENERICO
-   15            | ABSTRACTO
-   16            | ESPECIFICO
-   17            | FINAL
+   13 modificador: CONSTRUCTOR
+   14            | DESTRUCTOR
+   15            | GENERICO
+   16            | ABSTRACTO
+   17            | ESPECIFICO
+   18            | FINAL
 
-   18 modo: VALOR
-   19     | REFERENCIA
+   19 modo: VALOR
+   20     | REFERENCIA
 
-   20 tipo_basico: BOOLEANO
-   21            | CTC_CARACTER
-   22            | ENTERO
-   23            | REAL
+   21 tipo_basico: BOOLEANO
+   22            | CTC_CARACTER
+   23            | ENTERO
+   24            | REAL
 
-   24 longitud: CORTO
-   25         | LARGO
+   25 longitud: CORTO
+   26         | LARGO
 
 
 Gramática
@@ -145,8 +145,9 @@ Gramática
     0 $accept: definicion_programa $end
 
     1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN
+    2                    | error PROGRAMA
 
-    2 codigo_programa: %empty
+    3 codigo_programa: %empty
 
 
 Terminales con las reglas donde aparecen
@@ -161,7 +162,7 @@ $end (0) 0
 '>' (62)
 '\\' (92)
 '^' (94)
-error (256)
+error (256) 2
 OR (258)
 AND (259)
 NEG (260)
@@ -213,7 +214,7 @@ OTRO (305)
 PARA (306)
 PRINCIPIO (307)
 PRIVADO (308)
-PROGRAMA (309) 1
+PROGRAMA (309) 1 2
 PROTEGIDO (310)
 PRUEBA (311)
 PUBLICO (312)
@@ -260,65 +261,80 @@ No terminales con las reglas donde aparecen
 $accept (103)
     en la izquierda: 0
 definicion_programa (104)
-    en la izquierda: 1, en la derecha: 0
+    en la izquierda: 1 2, en la derecha: 0
 codigo_programa (105)
-    en la izquierda: 2, en la derecha: 1
+    en la izquierda: 3, en la derecha: 1
 
 
 Estado 0
 
     0 $accept: . definicion_programa $end
 
-    PROGRAMA  desplazar e ir al estado 1
+    error     desplazar e ir al estado 1
+    PROGRAMA  desplazar e ir al estado 2
 
-    definicion_programa  ir al estado 2
+    definicion_programa  ir al estado 3
 
 
 Estado 1
 
-    1 definicion_programa: PROGRAMA . IDENTIFICADOR ';' codigo_programa FIN
+    2 definicion_programa: error . PROGRAMA
 
-    IDENTIFICADOR  desplazar e ir al estado 3
+    PROGRAMA  desplazar e ir al estado 4
 
 
 Estado 2
 
-    0 $accept: definicion_programa . $end
+    1 definicion_programa: PROGRAMA . IDENTIFICADOR ';' codigo_programa FIN
 
-    $end  desplazar e ir al estado 4
+    IDENTIFICADOR  desplazar e ir al estado 5
 
 
 Estado 3
 
-    1 definicion_programa: PROGRAMA IDENTIFICADOR . ';' codigo_programa FIN
+    0 $accept: definicion_programa . $end
 
-    ';'  desplazar e ir al estado 5
+    $end  desplazar e ir al estado 6
 
 
 Estado 4
+
+    2 definicion_programa: error PROGRAMA .
+
+    $default  reduce usando la regla 2 (definicion_programa)
+
+
+Estado 5
+
+    1 definicion_programa: PROGRAMA IDENTIFICADOR . ';' codigo_programa FIN
+
+    ';'  desplazar e ir al estado 7
+
+
+Estado 6
 
     0 $accept: definicion_programa $end .
 
     $default  aceptar
 
 
-Estado 5
+Estado 7
 
     1 definicion_programa: PROGRAMA IDENTIFICADOR ';' . codigo_programa FIN
 
-    $default  reduce usando la regla 2 (codigo_programa)
+    $default  reduce usando la regla 3 (codigo_programa)
 
-    codigo_programa  ir al estado 6
+    codigo_programa  ir al estado 8
 
 
-Estado 6
+Estado 8
 
     1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa . FIN
 
-    FIN  desplazar e ir al estado 7
+    FIN  desplazar e ir al estado 9
 
 
-Estado 7
+Estado 9
 
     1 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN .
 

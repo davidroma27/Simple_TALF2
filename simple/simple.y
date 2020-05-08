@@ -42,31 +42,12 @@
 
 %%
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN;
+                    | error PROGRAMA { yyerrok;}
 
 codigo_programa:
    /*vacio*/
 ;
-
-
-
 
 
 literal: CTC_REAL
