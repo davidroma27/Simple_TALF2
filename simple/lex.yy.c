@@ -1240,7 +1240,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 20 "simple.l"
-{logging("caracter");    return CTC_CARACTER;}
+{printf( "linea %d, ctc entera: %s\n", yylineno, yytext );    return CTC_CARACTER;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
@@ -2347,19 +2347,4 @@ void yyfree (void * ptr )
 #line 63 "simple.l"
 
 
-int yywrap() {
-  return(1);
-}
-
-int main(int argc, char *argv[])
-{
-
-    if (argc < 2) {
-        printf("Uso: ./simple NombreArchivo\n");
-    }
-    else {
-        yyin = fopen(argv[1],"r");
-        yylex();
-    }
-}
 

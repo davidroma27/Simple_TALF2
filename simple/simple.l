@@ -17,7 +17,7 @@ CARACTER '(%['"%nrt])'|'(%[oO][0-7]+)'|'(%(x|X)[0-9a-fA-F]+)'|'([%][0-2]?[0-5]?[
 
 %%
 
-{CARACTER} {logging("caracter");    return CTC_CARACTER;}
+{CARACTER} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );    return CTC_CARACTER;}
            
 {ENTERO} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );
             return CTC_ENTERA;
@@ -62,18 +62,3 @@ programa { return PROGRAMA;}
 
 %%
 
-int yywrap() {
-  return(1);
-}
-
-int main(int argc, char *argv[])
-{
-
-    if (argc < 2) {
-        printf("Uso: ./simple NombreArchivo\n");
-    }
-    else {
-        yyin = fopen(argv[1],"r");
-        yylex();
-    }
-}
