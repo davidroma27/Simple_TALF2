@@ -39,14 +39,9 @@
 
 %%
 
-/*****************************************PROGRAMA****************************************/
-
-programa: definicion_programa 
-        | definicion_libreria
-        ;
-
-definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa ;
-
+definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa FIN;
+                    | error PROGRAMA { yyerrok;}
+                    
 codigo_programa: '[' libreria ']''*' cuerpo_subprograma ;
 
 libreria: IMPORTAR LIBRERIA nombre '[' COMO IDENTIFICADOR ']''?' ';'
@@ -94,9 +89,9 @@ longitud: CORTO
         ;
         
 tipo_basico: BOOLEANO 
-            | CARACTER 
-            | ENTERO 
-            | REAL
+            | CTC_CARACTER 
+            | CTC_ENTERA
+            | CTC_REAL
             ;
                         
 rango: expresion ".." expresion '[' ".." expresion ']''?' ;
@@ -175,7 +170,6 @@ instruccion: instruccion_asignacion
             | instruccion_interrupcion
             | instruccion_lanzamiento_excepcion
             | instruccion_captura_excepcion
-            | 
             ;
             
 instruccion_asignacion: objeto op_asignacion expresion ;
@@ -242,13 +236,40 @@ clausula_finalmente: FINALMENTE '[' instruccion ']''+' ;
 
 /********************************EXPRESIONES (INCOMPLETAS)********************************/
 
+expresion: expresion_potencia
+         | expresion_posfija
+         | expresion_binaria
+         | expresion_unaria
+         | expresion_condicional
+         ;
+
 expresion_potencia: expresion_posfija '[' '^' expresion_potencia ']''?' ;
 
 expresion_posfija: expresion_unaria '[' operador_posfijo ']''?' ;
 
+expresion_binaria: expresion '[' op_binario ']' expresion ;
+
 operador_posfijo: "++" 
             | "--"
             ;
+
+op_binario: "\\/"
+          | "/\\"
+          | '<'
+          | '>'
+          | "<="
+          | ">="
+          | '='
+          | "~="
+          | "<-"
+          | "->"
+          | '+'
+          | '-'
+          | '*'
+          | "/"
+          | "\\"
+          | '^'
+          ;
             
 expresion_unaria: '[' '-' ']''?' primario ;
 
@@ -278,6 +299,16 @@ enumeraciones: '[' expresion_condicional '[' clausula_iteracion ']''+' ']'
             | '{' '(' clave_valor ')''+' '}'
             | '{' '(' campo_valor ')''+' '}'
             ;
+
+expresion_condicional: expresion
+            | SI expresion ENTONCES expresion '[' SINO expresion ']''?' /*Es un if then else*/
+            ;
+
+clave_valor: CTC_CADENA "=>" expresion ;
+
+campo_valor: IDENTIFICADOR "=>" expresion ;
+
+
 
 expresion_condicional: expresion
             | SI expresion ENTONCES expresion '[' SINO expresion ']''?'
