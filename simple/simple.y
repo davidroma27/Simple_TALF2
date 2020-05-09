@@ -2,11 +2,12 @@
 %{
 
   #include <stdio.h>
+   #define YYDEBUG 1
+
   extern FILE *yyin;
   extern int yylex();
-
-  #define YYDEBUG 1
-
+  int yyerror(char *s);
+ 
 %}
 
 /*De menor a mayor precedencia*/
@@ -43,9 +44,49 @@
 
 /*******************************PROGRAMA************************************/
 
+programa: definicion_programa { printf ("programa -> definicion_programa \n"); }
+        | definicion_libreria { printf ("programa -> definicion_libreria \n"); }
+        ;
+
 varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
                       | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR\n"); }
                       ;
+
+varias_librerias: varias_librerias libreria { printf ("varias_librerias -> varias_librerias libreria \n"); }
+                |
+                ;
+
+definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa     { printf ("definicion_programa -> PROGRAMA IDENTIFICADOR ; codigo_programa \n"); };
+
+codigo_programa: varias_librerias  cuerpo_subprograma               { printf ("codigo_programa -> varias_librerias  cuerpo_subprograma \n"); };
+
+libreria: IMPORTAR LIBRERIA nombre ';'                              { printf ("libreria -> IMPORTAR LIBRERIA nombre ; \n"); }
+        | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ; \n"); }
+        | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'    { printf ("libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
+        ;
+
+cero_o_masID:  cero_o_masID IDENTIFICADOR "::"    { printf ("cero_o_masID -> cero_o_masID IDENTIFICADOR ::\n"); }
+            | 
+            ;
+
+nombre:  cero_o_masID IDENTIFICADOR     { printf ("nombre -> cero_o_masID IDENTIFICADOR\n"); };
+
+definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria;
+
+codigo_libreria: varias_librerias varias_declaraciones                  { printf ("codigo_libreria -> varias_librerias varias_declaraciones\n"); }
+               | varias_librerias exportaciones varias_declaraciones    { printf ("codigo_libreria -> varias_librerias exportaciones varias_declaraciones\n"); }
+               ;
+
+varios_nombres: varios_nombres ',' nombre     { printf ("varios_nombres ->  varios_nombres , nombre\n"); }
+              | nombre                        { printf ("varios_nombres ->  nombre\n"); }
+              ;
+
+exportaciones: EXPORTAR varios_nombres ';'    { printf ("exportaciones -> EXPORTAR varios_nombres ;\n"); };
+
+declaracion: declaracion_objeto         { printf ("declaracion -> declaracion_objeto\n"); }
+           | declaracion_tipo           { printf ("declaracion -> declaracion_tipo\n"); }
+           | declaracion_subprograma    { printf ("declaracion -> declaracion_subprograma\n"); }
+           ;
 
 /*******************************OBJETOS************************************/
 
@@ -60,8 +101,8 @@ especificacion_tipo: nombre                  { printf ("especificacion_tipo -> n
 
 /*******************************TIPOS************************************/
 
-declaracion_tipo: TIPO identificador ES tipo_no_estructurado ';'     { printf ("declaracion_tipo -> TIPO identificador ES tipo_no_estructurado ;\n"); }
-                | TIPO identificador ES tipo_estructurado            { printf ("declaracion_tipo -> TIPO identificador ES tipo_estructurado \n"); }
+declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado ';'     { printf ("declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_no_estructurado ;\n"); }
+                | TIPO IDENTIFICADOR ES tipo_estructurado            { printf ("declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_estructurado \n"); }
                 ;
 
 tipo_no_estructurado: tipo_escalar        { printf ("tipo_no_estructurado -> tipo_escalar \n"); }
@@ -466,7 +507,7 @@ int main(int argc, char *argv[]) {
   yydebug = 0;
 	
   if (argc < 2) {
-    printf("Uso: ./simplon NombreArchivo\n");
+    printf("Uso: ./simple NombreArchivo\n");
     }
   else {
     yyin = fopen(argv[1],"r");
