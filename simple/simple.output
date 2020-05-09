@@ -45,6 +45,9 @@ Terminales no usados en la gramática
    ASIG_POT
    ASIG_DESPI
    ASIG_DESPD
+   OPERADOR
+   DELIM
+   RESERVADA
 
 
 Reglas inútiles en la gramática
@@ -451,173 +454,176 @@ ASIG_RESTO (342)
 ASIG_POT (343)
 ASIG_DESPI (344)
 ASIG_DESPD (345)
-"::" (346) 8
-":=" (347) 15 16 39 41 60 73 85
-".." (348) 31 32
-":+" (349) 74
-":-" (350) 75
-":*" (351) 76
-":/" (352) 77
-":\\" (353) 78
-":^" (354) 79
-":<" (355) 80
-":>" (356) 81
-"=>" (357) 145 146
-"++" (358) 105
-"--" (359) 106
-"\\/" (360) 107
-"/\\" (361) 108
-"<=" (362) 111
-">=" (363) 112
-"~=" (364) 114
-"<-" (365) 115
-"->" (366) 116
-"/" (367) 120
-"\\" (368) 121
+OPERADOR (346)
+DELIM (347)
+RESERVADA (348)
+"::" (349) 8
+":=" (350) 15 16 39 41 60 73 85
+".." (351) 31 32
+":+" (352) 74
+":-" (353) 75
+":*" (354) 76
+":/" (355) 77
+":\\" (356) 78
+":^" (357) 79
+":<" (358) 80
+":>" (359) 81
+"=>" (360) 145 146
+"++" (361) 105
+"--" (362) 106
+"\\/" (363) 107
+"/\\" (364) 108
+"<=" (365) 111
+">=" (366) 112
+"~=" (367) 114
+"<-" (368) 115
+"->" (369) 116
+"/" (370) 120
+"\\" (371) 121
 
 
 No terminales con las reglas donde aparecen
 
-$accept (133)
+$accept (136)
     en la izquierda: 0
-programa (134)
+programa (137)
     en la izquierda: 1 2, en la derecha: 0
-definicion_programa (135)
+definicion_programa (138)
     en la izquierda: 3 4, en la derecha: 1
-codigo_programa (136)
+codigo_programa (139)
     en la izquierda: 5, en la derecha: 3
-libreria (137)
+libreria (140)
     en la izquierda: 6 7, en la derecha: 5 10
-nombre (138)
+nombre (141)
     en la izquierda: 8, en la derecha: 6 7 11 17 43 84 91 96 135
-definicion_libreria (139)
+definicion_libreria (142)
     en la izquierda: 9, en la derecha: 2
-codigo_libreria (140)
+codigo_libreria (143)
     en la izquierda: 10, en la derecha: 9
-exportaciones (141)
+exportaciones (144)
     en la izquierda: 11, en la derecha: 10
-declaracion (142)
+declaracion (145)
     en la izquierda: 12 13 14, en la derecha: 10 64
-declaracion_objeto (143)
+declaracion_objeto (146)
     en la izquierda: 15 16, en la derecha: 12 49
-especificacion_tipo (144)
+especificacion_tipo (147)
     en la izquierda: 17 18, en la derecha: 15 16 32 33 34 39 60 63
     88 89
-declaracion_tipo (145)
+declaracion_tipo (148)
     en la izquierda: 19 20, en la derecha: 13 48
-tipo_no_estructurado (146)
+tipo_no_estructurado (149)
     en la izquierda: 21 22 23, en la derecha: 18 19
-tipo_escalar (147)
+tipo_escalar (150)
     en la izquierda: 24, en la derecha: 21 40
-longitud (148)
+longitud (151)
     en la izquierda: 25 26, en la derecha: 24
-tipo_basico (149)
+tipo_basico (152)
     en la izquierda: 27 28 29 30, en la derecha: 24
-rango (150)
+rango (153)
     en la izquierda: 31, en la derecha: 24
-tipo_tabla (151)
+tipo_tabla (154)
     en la izquierda: 32 33, en la derecha: 22
-tipo_diccionario (152)
+tipo_diccionario (155)
     en la izquierda: 34, en la derecha: 23
-tipo_estructurado (153)
+tipo_estructurado (156)
     en la izquierda: 35 36 37, en la derecha: 20
-tipo_registro (154)
+tipo_registro (157)
     en la izquierda: 38, en la derecha: 35
-campo (155)
+campo (158)
     en la izquierda: 39, en la derecha: 38
-tipo_enumerado (156)
+tipo_enumerado (159)
     en la izquierda: 40, en la derecha: 36
-elemento_enumeracion (157)
+elemento_enumeracion (160)
     en la izquierda: 41, en la derecha: 40
-clase (158)
+clase (161)
     en la izquierda: 42, en la derecha: 37
-superclases (159)
+superclases (162)
     en la izquierda: 43, en la derecha: 42
-declaracion_componente (160)
+declaracion_componente (163)
     en la izquierda: 44, en la derecha: 42
-visibilidad (161)
+visibilidad (164)
     en la izquierda: 45 46 47, en la derecha: 44
-componente (162)
+componente (165)
     en la izquierda: 48 49 50, en la derecha: 44
-modificador (163)
+modificador (166)
     en la izquierda: 51 52 53 54 55 56, en la derecha: 50
-declaracion_subprograma (164)
+declaracion_subprograma (167)
     en la izquierda: 57, en la derecha: 14 50
-cabecera_subprograma (165)
+cabecera_subprograma (168)
     en la izquierda: 58, en la derecha: 57
-parametrizacion (166)
+parametrizacion (169)
     en la izquierda: 59, en la derecha: 58
-declaracion_parametros (167)
+declaracion_parametros (170)
     en la izquierda: 60, en la derecha: 59
-modo (168)
+modo (171)
     en la izquierda: 61 62, en la derecha: 60
-tipo_resultado (169)
+tipo_resultado (172)
     en la izquierda: 63, en la derecha: 58
-cuerpo_subprograma (170)
+cuerpo_subprograma (173)
     en la izquierda: 64, en la derecha: 5 57
-instruccion (171)
+instruccion (174)
     en la izquierda: 65 66 67 68 69 70 71, en la derecha: 64 86 87
     92 96 97 98
-instruccion_asignacion (172)
+instruccion_asignacion (175)
     en la izquierda: 72, en la derecha: 65
-op_asignacion (173)
+op_asignacion (176)
     en la izquierda: 73 74 75 76 77 78 79 80 81, en la derecha: 72
-instruccion_devolver (174)
+instruccion_devolver (177)
     en la izquierda: 82, en la derecha: 66
-instruccion_llamada (175)
+instruccion_llamada (178)
     en la izquierda: 83, en la derecha: 67
-llamada_subprograma (176)
+llamada_subprograma (179)
     en la izquierda: 84, en la derecha: 83 126
-definicion_parametro (177)
+definicion_parametro (180)
     en la izquierda: 85, en la derecha: 84
-instruccion_si (178)
+instruccion_si (181)
     en la izquierda: 86, en la derecha: 68
-instruccion_bucle (179)
+instruccion_bucle (182)
     en la izquierda: 87, en la derecha: 69
-clausula_iteracion (180)
+clausula_iteracion (183)
     en la izquierda: 88 89 90, en la derecha: 87 139
-instruccion_lanzamiento_excepcion (181)
+instruccion_lanzamiento_excepcion (184)
     en la izquierda: 91, en la derecha: 70
-instruccion_captura_excepcion (182)
+instruccion_captura_excepcion (185)
     en la izquierda: 92, en la derecha: 71
-clausulas (183)
+clausulas (186)
     en la izquierda: 93 94, en la derecha: 92
-clausulas_excepcion (184)
+clausulas_excepcion (187)
     en la izquierda: 95, en la derecha: 93
-clausula_excepcion_especifica (185)
+clausula_excepcion_especifica (188)
     en la izquierda: 96, en la derecha: 95
-clausula_excepcion_general (186)
+clausula_excepcion_general (189)
     en la izquierda: 97, en la derecha: 95
-clausula_finalmente (187)
+clausula_finalmente (190)
     en la izquierda: 98, en la derecha: 93 94
-expresion (188)
+expresion (191)
     en la izquierda: 99 100 101 102, en la derecha: 15 16 31 32 39
     41 60 72 82 85 86 88 90 104 128 137 140 143 144 145 146 147 148
-expresion_posfija (189)
+expresion_posfija (192)
     en la izquierda: 103, en la derecha: 99
-expresion_binaria (190)
+expresion_binaria (193)
     en la izquierda: 104, en la derecha: 100
-operador_posfijo (191)
+operador_posfijo (194)
     en la izquierda: 105 106, en la derecha: 103
-op_binario (192)
+op_binario (195)
     en la izquierda: 107 108 109 110 111 112 113 114 115 116 117 118
     119 120 121 122, en la derecha: 104
-expresion_unaria (193)
+expresion_unaria (196)
     en la izquierda: 123, en la derecha: 101 103
-primario (194)
+primario (197)
     en la izquierda: 124 125 126 127 128, en la derecha: 123
-literal (195)
+literal (198)
     en la izquierda: 129 130 131 132 133 134, en la derecha: 124
-objeto (196)
+objeto (199)
     en la izquierda: 135 136 137 138, en la derecha: 72 125 126 136
     137 138
-enumeraciones (197)
+enumeraciones (200)
     en la izquierda: 139 140 141 142, en la derecha: 127
-expresion_condicional (198)
+expresion_condicional (201)
     en la izquierda: 143 144 147 148, en la derecha: 102 139
-campo_valor (199)
+campo_valor (202)
     en la izquierda: 145 146, en la derecha: 142
-clave_valor (200)
+clave_valor (203)
     en la izquierda: 149, en la derecha: 141
 
 

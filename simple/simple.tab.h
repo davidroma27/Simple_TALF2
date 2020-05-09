@@ -132,7 +132,10 @@ extern int yydebug;
     ASIG_RESTO = 342,
     ASIG_POT = 343,
     ASIG_DESPI = 344,
-    ASIG_DESPD = 345
+    ASIG_DESPD = 345,
+    OPERADOR = 346,
+    DELIM = 347,
+    RESERVADA = 348
   };
 #endif
 
