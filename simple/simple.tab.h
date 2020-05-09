@@ -118,43 +118,27 @@ extern int yydebug;
     VERDADERO = 328,
     CTC_CADENA = 329,
     IDENTIFICADOR = 330,
-    DOS_PUNTOS = 331,
-    CUATRO_PUNTOS = 332,
-    ASIGNACION = 333,
-    FLECHA = 334,
-    ASIG_SUMA = 335,
-    ASIG_RESTA = 336,
-    ASIG_MULT = 337,
-    ASIG_DIV = 338,
-    ASIG_RESTO = 339,
-    ASIG_POT = 340,
-    ASIG_DESPI = 341,
-    ASIG_DESPD = 342,
-    CTC_CARACTER = 343,
-    CTC_ENTERA = 344,
-    CTC_REAL = 345,
-    OPERADOR = 346,
-    DELIM = 347,
-    RESERVADA = 348
+    CTC_CARACTER = 331,
+    CTC_ENTERA = 332,
+    CTC_REAL = 333,
+    DOS_PUNTOS = 334,
+    CUATRO_PUNTOS = 335,
+    ASIGNACION = 336,
+    FLECHA = 337,
+    ASIG_SUMA = 338,
+    ASIG_RESTA = 339,
+    tokenASIG_MULT = 340,
+    ASIG_DIV = 341,
+    ASIG_RESTO = 342,
+    ASIG_POT = 343,
+    ASIG_DESPI = 344,
+    ASIG_DESPD = 345
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-union YYSTYPE
-{
-#line 14 "simple.y" /* yacc.c:1909  */
-
-    int valor_entero;
-    double valor_real;
-    char * texto;
-    char * reservada;
-
-#line 155 "simple.tab.h" /* yacc.c:1909  */
-};
-
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
