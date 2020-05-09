@@ -21,12 +21,12 @@
 %nonassoc INC DEC
 %nonassoc MENOS_UNARIO /*Negativo (-)*/
 
-%token ABSTRACTO BOOLEANO BUCLE CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO 
-%token CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES 
-%token ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO 
-%token IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO 
-%token PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR 
-%token SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO 
+%token ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE
+%token DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO
+%token EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA
+%token MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL
+%token REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA
+%token VALOR VERDADERO
 
 %token CTC_CADENA IDENTIFICADOR CTC_CARACTER
 %token CTC_ENTERA
@@ -49,11 +49,83 @@ varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("var
 
 /*******************************OBJETOS************************************/
 
+declaracion_objeto: varios_identificadores ':' CONSTANTE especificacion_tipo ":=" expresion ';'     { printf ("declaracion_objeto -> varios_identificadores : CONSTANTE especificacion_tipo := expresion ;\n"); }
+                  | varios_identificadores ':' especificacion_tipo ';'                              { printf ("declaracion_objeto -> varios_identificadores : especificacion_tipo ; \n"); }
+                  | varios_identificadores ':' especificacion_tipo ":=" expresion  ';'              { printf ("declaracion_objeto -> varios_identificadores : especificacion_tipo := expresion ;\n"); }
+                  ;
+
 especificacion_tipo: nombre                  { printf ("especificacion_tipo -> nombre\n"); }
                    | tipo_no_estructurado    { printf ("especificacion_tipo -> tipo_no_estructurado\n"); }
                    ;
 
 /*******************************TIPOS************************************/
+
+declaracion_tipo: TIPO identificador ES tipo_no_estructurado ';'     { printf ("declaracion_tipo -> TIPO identificador ES tipo_no_estructurado ;\n"); }
+                | TIPO identificador ES tipo_estructurado            { printf ("declaracion_tipo -> TIPO identificador ES tipo_estructurado \n"); }
+                ;
+
+tipo_no_estructurado: tipo_escalar        { printf ("tipo_no_estructurado -> tipo_escalar \n"); }
+                    | tipo_tabla          { printf ("tipo_no_estructurado -> tipo_tabla\n"); }
+                    | tipo_diccionario    { printf ("tipo_no_estructurado -> tipo_diccionario \n"); }
+                    ;
+
+tipo_escalar: tipo_basico                                   { printf ("tipo_escalar -> tipo_basico \n"); }
+            | SIGNO tipo_basico                             { printf ("tipo_escalar -> SIGNO tipo_basico \n"); }
+            | tipo_basico  longitud                         { printf ("tipo_escalar -> tipo_basico  longitud \n"); }
+            | tipo_basico RANGO rango                       { printf ("tipo_escalar -> tipo_basico RANGO rango \n"); }
+            | tipo_basico longitud RANGO rango              { printf ("tipo_escalar -> tipo_basico longitud RANGO rango \n"); }   
+            | SIGNO tipo_basico longitud                    { printf ("tipo_escalar -> SIGNO tipo_basico longitud\n"); }
+            | SIGNO tipo_basico longitud RANGO rango        { printf ("tipo_escalar -> SIGNO tipo_basico longitud RANGO rango \n"); }
+            | SIGNO tipo_basico RANGO rango                 { printf ("tipo_escalar -> SIGNO tipo_basico RANGO rango \n"); }
+            ;
+
+longitud: CORTO   { printf ("longitud -> CORTO \n"); }  
+        | LARGO   { printf ("longitud -> LARGO \n"); }
+        ;
+
+tipo_basico: BOOLEANO   { printf ("tipo_basico -> BOOLEANO \n"); }
+           | CARACTER   { printf ("tipo_basico -> CARACTER \n"); }
+           | ENTERO     { printf ("tipo_basico -> ENTERO \n"); }
+           | REAL       { printf ("tipo_basico -> REAL \n"); }
+           ;
+
+rango: expresion ".." expresion                   { printf ("rango -> expresion .. expresion\n"); }
+     | expresion ".." expresion ".." expresion    { printf ("rango -> expresion .. expresion .. expresion\n"); }
+     ;
+
+tipo_tabla: TABLA '(' expresion ".." expresion ')' DE especificacion_tipo     { printf ("tipo_tabla -> TABLA ( expresion .. expresion ) DE especificacion_tipo\n"); }
+          | LISTA DE especificacion_tipo                                      { printf ("tipo_tabla -> LISTA DE especificacion_tipo \n"); }
+          ;
+
+tipo_diccionario: DICCIONARIO  DE especificacion_tipo   { printf ("tipo_diccionario -> DICCIONARIO  DE especificacion_tipo\n"); };
+
+tipo_estructurado: tipo_registro                        { printf ("tipo_estructurado -> tipo_registro\n"); }
+                 | tipo_enumerado                       { printf ("tipo_estructurado -> tipo_enumerado\n"); }
+                 | clase                                { printf ("tipo_estructurado -> clase\n"); }
+                 ;
+
+varios_campos: varios_campos campo                     { printf ("varios_campos -> varios_campos campo\n"); }
+             | campo                                   { printf ("varios_campos -> campo\n"); }
+             ;
+
+tipo_registro: REGISTRO varios_campos FIN REGISTRO     { printf ("tipo_registro -> REGISTRO varios_campos FIN REGISTRO\n"); }
+             ;
+
+campo: varios_identificadores ':' especificacion_tipo ';'                    { printf ("campo -> varios_identificadores : especificacion_tipo ;\n"); }
+     | varios_identificadores ':' especificacion_tipo ":=" expresion ';'     { printf ("campo -> varios_identificadores : especificacion_tipo := expresion ;\n"); }
+     ;
+
+tipo_enumerado: ENUMERACION varios_elementos_enumeracion FIN ENUMERACION                     { printf ("tipo_enumerado -> ENUMERACION varios_elementos_enumeracion FIN ENUMERACION\n"); }
+              | ENUMERACION DE tipo_escalar varios_elementos_enumeracion FIN ENUMERACION     { printf ("tipo_enumerado -> ENUMERACION DE tipo_escalar varios_elementos_enumeracion FIN ENUMERACION\n"); }
+              ;
+
+varios_elementos_enumeracion: varios_elementos_enumeracion ',' elemento_enumeracion     { printf ("varios_elementos_enumeracion -> varios_elementos_enumeracion , elemento_enumeracion\n"); }
+                            | elemento_enumeracion                                     { printf ("varios_elementos_enumeracion -> elemento_enumeracion\n"); }
+                            ;
+
+elemento_enumeracion: IDENTIFICADOR                     { printf ("elemento_enumeracion -> IDENTIFICADOR\n"); }
+                    | IDENTIFICADOR ":=" expresion      { printf ("elemento_enumeracion -> IDENTIFICADOR := expresion\n"); }
+                    ;
 
 /*******************************CLASES************************************/
 
