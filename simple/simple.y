@@ -18,10 +18,55 @@
 
 %token PUNTOS RESTO ASIGNACION FLECHA POTENCIA INC DEC DESP_IZDA
 %token DESP_DCHA LEQ GEQ NEQ AND OR
-
+%token OBJETO
 %%
 
+/*******************************OBJETOS************************************/
+
+especificacion_tipo:nombre  { printf ("especificacion_tipo -> nombre\n"); }
+  |tipo_no_estructurado { printf ("especificacion_tipo -> tipo_no_estructurado\n"); }
+  ;
+
+
+/*******************************INSTRUCCIONES******************************/
+
+clausula_iteracion: PARA IDENTIFICADOR EN expresion  { printf ("clausula_iteracion -> para identificador en expresion\n"); }
+  |PARA IDENTIFICADOR ':' especificacion_tipo EN expresion  { printf ("clausula_iteracion -> para identificador: especificacion_tipo en expresion\n"); }
+  |REPETIR IDENTIFICADOR EN RANGO { printf ("clausula_iteracion -> repetir identificador en rango\n"); }
+  |REPETIR IDENTIFICADOR EN RANGO DESCENDENTE { printf ("clausula_iteracion -> repetir identificador en rango descendente\n"); }
+  |REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO { printf ("clausula_iteracion -> repetir identificador: especificacion_tipo en rango\n"); }
+  |REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO DESCENDENTE { printf ("clausula_iteracion -> repetir identificador: especificacion_tipo en rango descendente\n"); }
+  |MIENTRAS expresion {printf("clausula_iteracion -> mientras expresion\n");}
+  ;
+
+
+
+
+
 /*******************************EXPRESIONES********************************/
+expresion: expresion_potencia
+         | expresion_posfija
+         | expresion_binaria
+         | expresion_unaria
+         | expresion_condicional
+         ;
+
+expresion_potencia: expresion_posfija                        { printf ("expresion_potencia ->  expresion_posfija\n"); }
+                  | expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); }
+                  ;
+
+expresion_posfija: expresion_unaria                   { printf ("expresion posfija -> expresion unaria\n"); }
+                 | expresion_unaria operador_posfijo    { printf ("expresion posfija -> expresion unaria operador posfijo\n"); }
+                 ;
+
+operador_posfijo: INC        { printf ("operador posfijo -> '++'\n"); } 
+                | DEC        { printf ("operador posfijo -> '--'\n"); }
+                ;
+
+expresion_unaria: primario            { printf ("expresion unaria -> primario\n"); }
+                | '-' primario    { printf ("expresion unaria -> '-' primario\n"); }
+                ;
+
 
 primario: literal                              { printf ("primario -> literal\n"); }
         | objeto                               { printf ("primario -> objeto\n"); }
@@ -45,7 +90,7 @@ num: CTC_ENTERA	{ printf ("num -> CTC_ENTERA\n"); }
       | CTC_REAL 	{ printf ("num -> CTC_REAL\n"); }
       ;	
 
-objeto:     nombre
+objeto:      nombre
             | objeto '.' IDENTIFICADOR
             | objeto '[' varias_expresiones ']'
             | objeto '{' varias_ctc_cadena '}'
