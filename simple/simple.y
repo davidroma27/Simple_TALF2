@@ -65,6 +65,36 @@ instruccion: instruccion_asignacion             { printf ("instruccion -> instru
           |  ';'                                { printf ("instruccion -> ;\n"); }
           ;
 
+instruccion_asignacion: objeto op_asignacion expresion ';' { printf ("instruccion_asignacion -> objeto op_asignacion expresion ;\n"); }
+;
+
+op_asignacion: ":="
+             |":+"
+             |":-"
+             |"-*"
+             |":/"
+             |":\\"
+             |":^"
+             |":<"
+             |":>"
+             ;
+
+instruccion_devolver: DEVOLVER ';' { printf ("instruccion_devolver -> DEVOLVER ;\n"); }
+                    | DEVOLVER expresion ';'  { printf ("instruccion_devolver -> DEVOLVER expresion ;\n"); }
+                    ;
+
+instruccion_llamada: llamada_subprograma ';'  { printf ("instruccion_llamada -> llamada_subprograma ;\n"); };
+
+llamada_subprograma: nombre '(' varias_definiciones_parametro ')' { printf ("llamada_subprograma -> nombre varias_definiciones_parametro\n"); };
+
+varias_definiciones_parametro: varias_definiciones_parametro ',' definicion_parametro   { printf ("varias_definiciones_parametro -> varias_definiciones_parametro , definicion_parametro\n"); }
+                             | definicion_parametro                                     { printf ("varias_definiciones_parametro ->  definicion_parametro\n"); }
+                             ;
+
+definicion_parametro:  expresion       { printf ("definicion_parametro ->  expresion\n"); }
+                    | IDENTIFICADOR ":=" expresion { printf ("definicion_parametro ->  IDENTIFICADOR ASIGNACION expresion\n"); }
+                    ;
+
 clausula_iteracion: PARA IDENTIFICADOR EN expresion                                     { printf ("clausula_iteracion -> para identificador en expresion\n"); }
                   | PARA IDENTIFICADOR ':' especificacion_tipo EN expresion             { printf ("clausula_iteracion -> para identificador: especificacion_tipo en expresion\n"); }
                   | REPETIR IDENTIFICADOR EN RANGO                                      { printf ("clausula_iteracion -> repetir identificador en rango\n"); }
@@ -73,6 +103,23 @@ clausula_iteracion: PARA IDENTIFICADOR EN expresion                             
                   | REPETIR IDENTIFICADOR ':' especificacion_tipo EN RANGO DESCENDENTE  { printf ("clausula_iteracion -> repetir identificador: especificacion_tipo en rango descendente\n"); }
                   | MIENTRAS expresion                                                  { printf("clausula_iteracion -> mientras expresion\n");}
                   ;
+
+instruccion_interrupcion: SIGUIENTE ';'                         { printf ("instruccion_interrupcion -> SIGUIENTE ;"); }
+                        | SIGUIENTE cuando ';'                  { printf ("instruccion_interrupcion -> SIGUIENTE cuando ;"); }
+                        | SALIR                                 { printf ("instruccion_interrupcion -> SALIR"); }
+                        | SALIR DE IDENTIFICADOR cuando ';'     { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ;"); }
+                        | SALIR DE IDENTIFICADOR ';'            { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR ;"); }
+                        | SALIR CUANDO ';'                      { printf ("instruccion_interrupcion -> SALIR CUANDO ;"); }
+                        ;
+
+cuando: CUANDO expresion                          { printf ("cuando ->CUANDO expresion"); }
+;
+
+instruccion_lanzamiento_excepcion: LANZA nombre ';'                    { printf ("instruccion_lanzamiento_excepcion -> LANZA nombre ;"); }
+;
+
+instruccion_captura_excepcion: PRUEBA  varias_instrucciones clausulas FIN PRUEBA                   { printf ("instruccion_captura_excepcion -> PRUEBA varias_instrucciones clausulas FIN PRUEBA"); }
+;
 
 clausulas: clausulas_excepcion                                         { printf ("clausulas ->clausulas_excepcion\n"); }
          | clausulas_excepcion clausula_finalmente                     { printf ("clausulas ->clausulas_excepcion clausula_finalmente\n"); }
