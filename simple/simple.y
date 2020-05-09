@@ -44,7 +44,7 @@
 /*******************************PROGRAMA************************************/
 
 varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
-                      | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR \n"); }
+                      | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR\n"); }
                       ;
 
 /*******************************OBJETOS************************************/
@@ -56,6 +56,51 @@ especificacion_tipo: nombre                  { printf ("especificacion_tipo -> n
 /*******************************TIPOS************************************/
 
 /*******************************CLASES************************************/
+
+clase: CLASE ULTIMA superclases varias_declaraciones_componentes FIN CLASE  { printf ("clase -> CLASE ULTIMA superclases varias_declaraciones_componentes FIN CLASE \n"); }
+     | CLASE varias_declaraciones_componentes FIN CLASE                     { printf ("clase -> CLASE varias_declaraciones_componentes FIN CLASE \n"); }
+     | CLASE ULTIMA  varias_declaraciones_componentes FIN CLASE             { printf ("clase -> CLASE ULTIMA  varias_declaraciones_componentes FIN CLASE \n"); }
+     | CLASE  superclases varias_declaraciones_componentes FIN CLASE        { printf ("clase -> CLASE  superclases varias_declaraciones_componentes FIN CLASE \n"); }
+     ;
+
+varias_declaraciones_componentes: varias_declaraciones_componentes declaracion_componente     { printf ("varias_declaraciones_componentes -> varias_declaraciones_componentes declaracion_componente  \n"); }
+                                | declaracion_componente                                      { printf ("varias_declaraciones_componentes -> declaracion_componente \n"); }
+                                ;
+
+superclases: '(' varios_nombres ')'                 { printf ("superclases -> ( varios_nombres ) \n"); };
+
+
+declaracion_componente: componente                  { printf ("declaracion_componente -> componente \n"); }
+                      | visibilidad componente      { printf ("declaracion_componente -> visibilidad componente \n"); }
+                      ;
+
+visibilidad: PUBLICO                                         { printf ("visibilidad -> PUBLICO \n"); }
+           | PROTEGIDO                                       { printf ("visibilidad ->  PROTEGIDO \n"); }
+           | PRIVADO                                         { printf ("visibilidad ->  PRIVADO\n"); }
+           ;
+
+componente: declaracion_tipo                                 { printf ("componente -> declaracion_tipo\n"); }
+          | declaracion_objeto                               { printf ("componente -> declaracion_objeto\n"); }
+          | varios_modificadores declaracion_subprograma     { printf ("componente -> varios_modificadores declaracion_subprograma\n"); }
+          ;
+
+sin_modificador: varios_modificadores        { printf ("sin_modificador -> varios_modificadores\n"); }
+               |
+               ;
+
+varios_modificadores: varios_modificadores ',' modificador     { printf ("varios_modificadores -> varios_modificadores , modificador\n"); }
+                    | modificador                              { printf ("varios_modificadores -> modificador\n"); }
+                    ;
+
+modificador: CONSTRUCTOR      { printf ("  modificador -> CONSTRUCTOR "); }
+           | DESTRUCTOR       { printf ("  modificador ->  DESTRUCTOR "); }
+           | GENERICO         { printf ("  modificador ->  GENERICO "); }
+           | ABSTRACTO        { printf ("  modificador -> ABSTRACTO "); }
+           | ESPECIFICO       { printf ("  modificador ->  ESPECIFICO "); }
+           | FINAL            { printf ("  modificador -> FINAL"); }
+           ;
+
+
 
 /*******************************SUBPROGRAMAS********************************/
 
@@ -91,7 +136,7 @@ cuerpo_subprograma:  varias_declaraciones PRINCIPIO varias_instrucciones FIN    
 
 /* declaracion esta declarada en la seccion de programa */
 /* se declara aqui varias_declaraciones para la regla cuerpo_subprograma */
-varias_declaraciones: varias_declaraciones declaraciones       { printf ("varias_declaraciones -> varias_declaraciones declaraciones\n"); }
+varias_declaraciones: varias_declaraciones declaracion       { printf ("varias_declaraciones -> varias_declaraciones declaracion\n"); }
                     |
                     ;
 
