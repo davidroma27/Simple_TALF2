@@ -41,11 +41,59 @@
 
 %%
 
+/*******************************PROGRAMA************************************/
+
+varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
+                      | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR \n"); }
+                      ;
+
 /*******************************OBJETOS************************************/
 
 especificacion_tipo: nombre                  { printf ("especificacion_tipo -> nombre\n"); }
                    | tipo_no_estructurado    { printf ("especificacion_tipo -> tipo_no_estructurado\n"); }
                    ;
+
+/*******************************TIPOS************************************/
+
+/*******************************CLASES************************************/
+
+/*******************************SUBPROGRAMAS********************************/
+
+declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA   { printf ("  declaracion_subprograma -> SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA"); }
+                       ;
+
+cabecera_subprograma: IDENTIFICADOR                                   { printf ("cabecera_subprograma -> IDENTIFICADOR \n"); }
+                    | IDENTIFICADOR parametrizacion                   { printf ("cabecera_subprograma -> IDENTIFICADOR parametrizacion \n"); }
+                    | IDENTIFICADOR tipo_resultado                    { printf ("cabecera_subprograma -> IDENTIFICADOR tipo_resultado \n"); }
+                    | IDENTIFICADOR parametrizacion tipo_resultado    { printf ("cabecera_subprograma -> IDENTIFICADOR parametrizacion tipo_resultado \n"); }
+                    ;
+
+parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros ')'             { printf ("parametrizacion -> ( varias_declaraciones_parametros declaracion_parametros )\n"); };
+
+/* varios_identificadores esta declarada en programa*/
+declaracion_parametros: varios_identificadores ':' especificacion_tipo                       { printf ("declaracion_parametros -> varios_identificadores : especificacion_tipo"); }
+                      | varios_identificadores ':' modo especificacion_tipo                  { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo"); }
+                      | varios_identificadores ':' especificacion_tipo ":=" expresion        { printf ("declaracion_parametros -> varios_identificadores : especificacion_tipo := expresion"); }
+                      | varios_identificadores ':' modo especificacion_tipo ":=" expresion   { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo := expresion"); }
+                      ;
+
+varias_declaraciones_parametros: varias_declaraciones_parametros declaracion_parametros ';'  { printf ("varias_declaraciones_parametros -> varias_declaraciones_parametros declaracion_parametros \n"); }
+                               |
+                               ;
+
+modo: VALOR                      { printf ("modo -> VALOR\n"); }
+    | REFERENCIA                 { printf ("modo -> REFERENCIA\n"); }
+    ;
+
+tipo_resultado: DEVOLVER especificacion_tipo      { printf ("  tipo_resultado -> DEVOLVER especificacion_tipo\n"); };
+
+cuerpo_subprograma:  varias_declaraciones PRINCIPIO varias_instrucciones FIN    { printf ("cuerpo_subprograma -> varias_declaraciones PRINCIPIO varias_instrucciones FIN"); };
+
+/* declaracion esta declarada en la seccion de programa */
+/* se declara aqui varias_declaraciones para la regla cuerpo_subprograma */
+varias_declaraciones: varias_declaraciones declaraciones       { printf ("varias_declaraciones -> varias_declaraciones declaraciones\n"); }
+                    |
+                    ;
 
 /*******************************INSTRUCCIONES********************************/
 
