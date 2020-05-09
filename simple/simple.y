@@ -95,6 +95,38 @@ definicion_parametro:  expresion       { printf ("definicion_parametro ->  expre
                     | IDENTIFICADOR ":=" expresion { printf ("definicion_parametro ->  IDENTIFICADOR ASIGNACION expresion\n"); }
                     ;
 
+instruccion_si: SI expresion ENTONCES varias_instrucciones  { printf ("instruccion_si ->  SI expresion ENTONCES varias_instrucciones\n"); }
+              | SINO FIN SI { printf ("instruccion_si ->  SINO FIN SI\n"); }
+              | FIN SI { printf ("instruccion_si -> FIN SI\n"); }
+              ;
+
+instruccion_casos: CASOS expresion ES varios_casos FIN CASOS { printf ("instruccion_casos ->  CASOS expresion ES varios_casos FIN CASOS \n"); };
+
+caso: CUANDO entradas "=>" varias_instrucciones { printf ("caso ->  CUANDO entradas => varias_instrucciones\n"); };
+
+varios_casos: varios_casos caso       { printf ("varios_casos ->  varios_casos caso \n"); }
+            | caso                    { printf ("varios_casos ->  caso \n"); }
+            ;
+
+entradas: varias_entradas entrada     { printf ("entradas ->  varias_entradas entrada\n"); };
+
+varias_entradas: varias_entradas entrada  ':'     { printf ("varias_entradas ->  varias_entradas entrada :\n"); }
+               |        
+               ;
+
+entrada: expresion                    { printf ("entrada ->  expresion\n"); }
+       | expresion ".." expresion     { printf ("entrada ->  expresion .. expresion\n"); }
+       | OTRO                         { printf ("entrada ->  OTRO\n"); }
+       ;
+
+instruccion_bucle: clausula_iteracion varias_instrucciones FIN BUCLE                      { printf ("instruccion_bucle ->  clausula_iteracion varias_instrucciones FIN BUCLE\n"); }
+                 | IDENTIFICADOR ';' clausula_iteracion varias_instrucciones FIN BUCLE    { printf ("instruccion_bucle ->  IDENTIFICADOR ; clausula_iteracion varias_instrucciones FIN BUCLE\n"); }
+                 ;
+
+varias_instrucciones: varias_instrucciones instruccion          { printf ("varias_instrucciones ->  varias_instrucciones instruccion\n"); }
+                    | instruccion                               { printf ("varias_instrucciones ->  instruccion\n"); }
+                    ;
+
 clausula_iteracion: PARA IDENTIFICADOR EN expresion                                     { printf ("clausula_iteracion -> para identificador en expresion\n"); }
                   | PARA IDENTIFICADOR ':' especificacion_tipo EN expresion             { printf ("clausula_iteracion -> para identificador: especificacion_tipo en expresion\n"); }
                   | REPETIR IDENTIFICADOR EN RANGO                                      { printf ("clausula_iteracion -> repetir identificador en rango\n"); }
