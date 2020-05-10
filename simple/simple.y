@@ -28,7 +28,7 @@
 
 /*******************************PROGRAMA************************************/
 
-programa: definicion_programa { printf ("\tprograma -> definicion_programa \n"); }
+programa: definicion_programa { printf ("\tEXITO: programa -> definicion_programa \n"); }
         | definicion_libreria { printf ("\tprograma -> definicion_libreria \n"); }
         ;
 
