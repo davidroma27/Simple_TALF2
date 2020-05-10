@@ -18,7 +18,7 @@
 %left DESPI DESPD /*Desplazamiento izq(<-) | op_desp der (->)*/
 %left '+' '-'
 %left '*' '/' '\\'
-%right '^'
+%right POTENCIA
 %nonassoc INC DEC
 %nonassoc MENOS_UNARIO /*Negativo (-)*/
 
@@ -376,30 +376,51 @@ clausula_finalmente: FINALMENTE varias_instrucciones        { printf ("clausula_
 
 /*******************************EXPRESIONES********************************/
 
-expresion: expresion_binaria
-         | expresion_posfija        
-         | expresion_condicional
+/*Establecemos las asociatividades de los operadores binarios*/
+expresion: expresion OR op_and 
+         | op_and
          ;
-                      
-expresion_binaria: expresion '+' expresion  
-                 | expresion '-' expresion  
-                 | expresion '*' expresion  
-                 | expresion '/' expresion  
-                 | expresion AND expresion  
-                 | expresion OR expresion  
-                 | expresion '>' expresion  
-                 | expresion GEQ expresion  
-                 | expresion LEQ expresion  
-                 | expresion '<' expresion  
-                 | expresion '^' expresion  
-                 | expresion EQ expresion
-                 ;
+
+op_and: op_and AND op_negacion
+      | op_negacion
+      ;
+
+op_negacion: NEG op_comparacion
+           | op_comparacion
+           ;
+
+op_comparacion: op_desp '<' op_desp
+              | op_desp '>' op_desp
+              | op_desp LEQ op_desp
+              | op_desp GEQ op_desp
+              | op_desp EQ op_desp
+              | op_desp NEQ op_desp
+              | op_desp
+              ;
+
+op_desp: op_desp DESPD op_sumaresta
+       | op_desp DESPI op_sumaresta
+       | op_sumaresta
+       ;
+
+op_sumaresta: op_sumaresta '+' op_multdiv
+            | op_sumaresta '-' op_multdiv
+            | op_multdiv
+            ;
+
+op_multdiv: op_multdiv '*' op_potencia
+          | op_multdiv '/' op_potencia
+          | op_multdiv '\\' op_potencia
+          ;
+
+op_potencia: op_potencia POTENCIA expresion_posfija
+           | expresion_posfija
+           ;
 
 expresion_posfija: expresion_unaria INC	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
-                  |expresion_unaria DEC	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
-                  |expresion_unaria
+                 | expresion_unaria DEC	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
+                 | expresion_unaria
 ;
-
 
 expresion_unaria: primario			{ printf ("expresion unaria -> primario\n"); }
                 | '-' primario	{ printf ("expresion unaria -> '-' primario\n"); }
@@ -424,8 +445,8 @@ op_booleano: VERDADERO 	{ printf ("op_booleano -> VERDADERO\n"); }
            ;
 
 num: CTC_ENTERA	{ printf ("num -> CTC_ENTERA\n"); }
-      | CTC_REAL 	{ printf ("num -> CTC_REAL\n"); }
-      ;	
+   | CTC_REAL 	{ printf ("num -> CTC_REAL\n"); }
+   ;	
 
 objeto:     nombre
             | objeto '.' IDENTIFICADOR
