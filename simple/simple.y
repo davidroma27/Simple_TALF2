@@ -15,7 +15,7 @@
 %left AND
 %nonassoc NEG /*Negacion (~)*/
 %nonassoc '<' '>' LEQ GEQ EQ NEQ
-%left DESPI DESPD /*Desplazamiento izq(<-) | desplazamiento der (->)*/
+%left DESPI DESPD /*Desplazamiento izq(<-) | op_desp der (->)*/
 %left '+' '-'
 %left '*' '/' '\\'
 %right '^'
@@ -66,7 +66,7 @@ libreria: IMPORTAR LIBRERIA nombre ';'                              { printf ("l
         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'    { printf ("libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
         ;
 
-nombre:  varios_identificadores IDENTIFICADOR     { printf ("nombre -> cero_o_masID IDENTIFICADOR\n"); };
+nombre:  varios_identificadores IDENTIFICADOR     { printf ("nombre -> varios_identificadores IDENTIFICADOR\n"); };
 
 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria;
 
@@ -339,16 +339,13 @@ clausula_iteracion: PARA IDENTIFICADOR EN expresion                             
                   | MIENTRAS expresion                                                  { printf("clausula_iteracion -> mientras expresion\n");}
                   ;
 
-instruccion_interrupcion: SIGUIENTE ';'                         { printf ("instruccion_interrupcion -> SIGUIENTE ;"); }
-                        | SIGUIENTE cuando ';'                  { printf ("instruccion_interrupcion -> SIGUIENTE cuando ;"); }
-                        | SALIR                                 { printf ("instruccion_interrupcion -> SALIR"); }
-                        | SALIR DE IDENTIFICADOR cuando ';'     { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR cuando ;"); }
-                        | SALIR DE IDENTIFICADOR ';'            { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR ;"); }
-                        | SALIR CUANDO ';'                      { printf ("instruccion_interrupcion -> SALIR CUANDO ;"); }
+instruccion_interrupcion: SIGUIENTE ';'                                   { printf ("instruccion_interrupcion -> SIGUIENTE ;"); }
+                        | SIGUIENTE CUANDO expresion ';'                  { printf ("instruccion_interrupcion -> SIGUIENTE CUANDO expresion ;"); }
+                        | SALIR                                           { printf ("instruccion_interrupcion -> SALIR"); }
+                        | SALIR DE IDENTIFICADOR CUANDO expresion ';'     { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR CUANDO expresion ;"); }
+                        | SALIR DE IDENTIFICADOR ';'                      { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR ;"); }
+                        | SALIR CUANDO ';'                                { printf ("instruccion_interrupcion -> SALIR CUANDO ;"); }
                         ;
-
-cuando: CUANDO expresion                          { printf ("cuando ->CUANDO expresion"); }
-;
 
 instruccion_lanzamiento_excepcion: LANZA nombre ';'                    { printf ("instruccion_lanzamiento_excepcion -> LANZA nombre ;"); }
 ;
@@ -379,40 +376,31 @@ clausula_finalmente: FINALMENTE varias_instrucciones        { printf ("clausula_
 
 /*******************************EXPRESIONES********************************/
 
-expresion: expresion_potencia
+expresion: expresion_binaria
          | expresion_posfija
-         | expresion_binaria
          | expresion_unaria
          | expresion_condicional
          ;
-
-expresion_binaria: expresion op_binario expresion    { printf ("expresion_binaria ->  expresion operador_binario expresion\n"); };	                 
-
-expresion_potencia: expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); };
+                      
+expresion_binaria: expresion '+' expresion  
+                 | expresion '-' expresion  
+                 | expresion '*' expresion  
+                 | expresion '/' expresion  
+                 | expresion AND expresion  
+                 | expresion OR expresion  
+                 | expresion '>' expresion  
+                 | expresion GEQ expresion  
+                 | expresion LEQ expresion  
+                 | expresion '<' expresion  
+                 | expresion '^' expresion  
+                 | expresion EQ expresion
+                 ;
 
 expresion_posfija: expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); };
 
 operador_posfijo: INC		{ printf ("operador posfijo -> INC\n"); } 
                 | DEC		{ printf ("operador posfijo -> DEC\n"); }
                 ;
-
-op_binario: "\\/"
-          | "/\\"
-          | '<'
-          | '>'
-          | "<="
-          | ">="
-          | '='
-          | "~="
-          | "<-"
-          | "->"
-          | '+'
-          | '-'
-          | '*'
-          | "/"
-          | "\\"
-          | '^'
-          ;
 
 expresion_unaria: primario			{ printf ("expresion unaria -> primario\n"); }
                 | '-' primario	{ printf ("expresion unaria -> '-' primario\n"); }
