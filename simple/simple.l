@@ -6,8 +6,8 @@
 %option yylineno
 ENTERO [0-9]+|%[xX][0-9a-fA-F]+|%[oO][0-7]+
 ID [_a-zA-Z][_a-zA-Z0-9]*
-DELIM "("|")"|":"|";"|","|".."|"|"|"=>"
-OPERADOR "+"|"-"|"*"|"/"|"--"|"++"|"\\"|"^"|"<-"|"->"|":="|":+"|":-"|":/"|":\\"|":^"|":<"|":>"|"."|"["|"]"|"{"|"}"|"::"|"<"|">"|"<="|">="|"="|"~="|"~"|"/\\"|"\\/"
+DELIM "("|")"|":"|";"|","|"|"
+OPERADOR "+"|"-"|"*"|"/"|"^"|"."|"["|"]"|"{"|"}"|"<"|">"|"="|"~"
 REAL_O %[oO]([0-7]+)?(\.)([0-7]+)(\^[+-]?[0-7]+)?
 REAL_X %[xX]([0-9a-fA-F]+)?((\.)[0-9a-fA-F]+)?(\^[+-]?[0-9a-fA-F]+)?
 REAL_ENT ([0-9]+)?(\.)?[0-9]+(\^[+-]?[0-9]+)?
@@ -97,13 +97,34 @@ CARACTER '(%['"%nrt])'|'(%[oO][0-7]+)'|'(%(x|X)[0-9a-fA-F]+)'|'([%][0-2]?[0-5]?[
 {REAL_ENT} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
             return CTC_REAL;
            }
-           
+\.\. {return DOS_PUNTOS;}
+:: {return CUATRO_PUNTOS;}
+:= {return ASIGNACION;}
+=\> {return FLECHA;}
+\+\+ {return INC;}
+-- {return DEC;}
+\<- {return DESPI;}
+-\> {return DESPD;}
+\<= {return LEQ;}
+\>= {return GEQ;}
+~= {return NEQ;}
+\/\\ {return AND;}
+\\\/  {return OR;}
+:\+ {return ASIG_SUMA;}
+:- {return ASIG_RESTA;}
+:\* {return ASIG_MULT;}
+:\/ {return ASIG_DIV;}
+:\\ {return ASIG_RESTO;}
+:^ {return ASIG_POT;}
+:\< {return ASIG_DESPI;}
+:\> {return ASIG_DESPD;}
+
 {OPERADOR} {printf( "linea %d, operador: %s\n", yylineno, yytext );
-            return OPERADOR;
+            return yytext[0];
            }
            
 {DELIM} {printf( "linea %d, delimitador: %s\n", yylineno, yytext );
-            return DELIM;
+            return yytext[0];
         }
 
 {ID} {printf( "linea %d, identificador: %s\n", yylineno, yytext );

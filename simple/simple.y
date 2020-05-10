@@ -11,35 +11,19 @@
 %}
 
 /*De menor a mayor precedencia*/
-%left OR
-%left AND
-%nonassoc NEG /*Negacion (~)*/
-%nonassoc '<' '>' LEQ GEQ EQ NEQ
-%left DESPI DESPD /*Desplazamiento izq(<-) | op_desp der (->)*/
-%left '+' '-'
-%left '*' '/' '\\'
-%right POTENCIA
-%nonassoc INC DEC
-%nonassoc MENOS_UNARIO /*Negativo (-)*/
 
-%token ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE
-%token DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO
-%token EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA
-%token MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL
-%token REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA
-%token VALOR VERDADERO
-
-%token CTC_CADENA IDENTIFICADOR CTC_CARACTER
-%token CTC_ENTERA
-%token CTC_REAL
-
-%token DOS_PUNTOS CUATRO_PUNTOS ASIGNACION FLECHA ASIG_SUMA ASIG_RESTA 
+%token ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO
+%token CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES 
+%token ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO
+%token IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO
+%token PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR
+%token SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER
+%token CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PUNTOS CUATRO_PUNTOS
+%token ASIGNACION FLECHA INC DEC DESPI DESPD LEQ GEQ NEQ AND OR ASIG_SUMA ASIG_RESTA
 %token ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESPD
 
-%token OPERADOR
-%token DELIM
-%token RESERVADA
 
+ 
 %%
 
 /*******************************PROGRAMA************************************/
@@ -48,12 +32,8 @@ programa: definicion_programa { printf ("programa -> definicion_programa \n"); }
         | definicion_libreria { printf ("programa -> definicion_libreria \n"); }
         ;
 
-varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
-                      | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR\n"); }
-                      | IDENTIFICADOR DOS_PUNTOS    { printf ("varios_identificadores -> varios_identificadores IDENTIFICADOR DOS_PUNTOS\n"); }
-                      ;
 
-varias_librerias: varias_librerias libreria { printf ("varias_librerias -> varias_librerias libreria \n"); }
+varias_librerias: varias_librerias libreria  { printf ("varias_librerias -> varias_librerias libreria \n"); }
                 |
                 ;
 
@@ -66,7 +46,13 @@ libreria: IMPORTAR LIBRERIA nombre ';'                              { printf ("l
         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'    { printf ("libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
         ;
 
-nombre:  varios_identificadores IDENTIFICADOR     { printf ("nombre -> varios_identificadores IDENTIFICADOR\n"); };
+varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
+                      | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR\n"); }                      
+                      ;
+
+nombre:  nombre CUATRO_PUNTOS IDENTIFICADOR     { printf ("nombre -> varios_identificadores IDENTIFICADOR\n");} 
+  |IDENTIFICADOR
+;
 
 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria;
 
@@ -107,8 +93,8 @@ tipo_no_estructurado: tipo_escalar        { printf ("tipo_no_estructurado -> tip
                     | tipo_diccionario    { printf ("tipo_no_estructurado -> tipo_diccionario \n"); }
                     ;
 
-tipo_escalar: tipo_basico                                   { printf ("tipo_escalar -> tipo_basico \n"); }
-            | SIGNO tipo_basico                             { printf ("tipo_escalar -> SIGNO tipo_basico \n"); }
+tipo_escalar: SIGNO tipo_basico                             { printf ("tipo_escalar -> tipo_basico \n"); }
+            | tipo_basico                                   { printf ("tipo_escalar -> SIGNO tipo_basico \n"); }
             | tipo_basico  longitud                         { printf ("tipo_escalar -> tipo_basico  longitud \n"); }
             | tipo_basico RANGO rango                       { printf ("tipo_escalar -> tipo_basico RANGO rango \n"); }
             | tipo_basico longitud RANGO rango              { printf ("tipo_escalar -> tipo_basico longitud RANGO rango \n"); }   
@@ -252,11 +238,11 @@ varias_declaraciones: varias_declaraciones declaracion       { printf ("varias_d
 
 /*******************************INSTRUCCIONES********************************/
 
-varias_instrucciones: instruccion varias_instrucciones         { printf ("varias_instrucciones -> varias_instrucciones  instruccion\n"); }                       
+varias_instrucciones: varias_instrucciones instruccion          { printf ("varias_instrucciones -> varias_instrucciones  instruccion\n"); }                       
                     | instruccion                             { printf ("varias_instrucciones -> instruccion\n"); }
                     ;
 
-instruccion: instruccion_asignacion             { printf ("instruccion -> instruccion_asignacion\n"); }
+instruccion: instruccion_asignacion              { printf ("instruccion -> instruccion_asignacion\n"); }
           |  instruccion_devolver               { printf ("instruccion -> instruccion_devolver\n"); }
           |  instruccion_llamada                { printf ("instruccion -> instruccion_llamada\n"); }
           |  instruccion_si                     { printf ("instruccion -> instruccion_si\n"); }
@@ -268,19 +254,20 @@ instruccion: instruccion_asignacion             { printf ("instruccion -> instru
           |  ';'                                { printf ("instruccion -> ;\n"); }
           ;
 
-instruccion_asignacion: objeto op_asignacion expresion ';' { printf ("instruccion_asignacion -> objeto op_asignacion expresion ;\n"); }
+instruccion_asignacion: objeto op_asignacion  expresion ';' { printf ("instruccion_asignacion -> objeto op_asignacion expresion ;\n"); }
+;
+op_asignacion: ASIGNACION
+  |ASIG_SUMA
+  |ASIG_DESPD
+  |ASIG_RESTA
+  |ASIG_DESPI
+  |ASIG_DIV
+  |ASIG_MULT
+  |ASIG_POT
+  |ASIG_RESTO
 ;
 
-op_asignacion: ":="
-             |":+"
-             |":-"
-             |"-*"
-             |":/"
-             |":\\"
-             |":^"
-             |":<"
-             |":>"
-             ;
+
 
 instruccion_devolver: DEVOLVER ';' { printf ("instruccion_devolver -> DEVOLVER ;\n"); }
                     | DEVOLVER expresion ';'  { printf ("instruccion_devolver -> DEVOLVER expresion ;\n"); }
@@ -302,9 +289,9 @@ definicion_parametro:  expresion       { printf ("definicion_parametro ->  expre
                     | IDENTIFICADOR ASIGNACION expresion { printf ("definicion_parametro ->  IDENTIFICADOR ASIGNACION expresion\n"); }
                     ;
 
-instruccion_si: SI expresion ENTONCES varias_instrucciones  { printf ("instruccion_si ->  SI expresion ENTONCES varias_instrucciones\n"); }
-              | SINO FIN SI                                 { printf ("instruccion_si ->  SINO FIN SI\n"); }
-              | FIN SI                                      { printf ("instruccion_si -> FIN SI\n"); }
+instruccion_si: SI expresion ENTONCES varias_instrucciones FIN SI  { printf ("instruccion_si ->  SI expresion ENTONCES varias_instrucciones\n"); }
+              | SI expresion ENTONCES varias_instrucciones SINO varias_instrucciones FIN SI                                 { printf ("instruccion_si ->  SINO FIN SI\n"); }
+                                           
               ;
 
 instruccion_casos: CASOS expresion ES varios_casos FIN CASOS { printf ("instruccion_casos ->  CASOS expresion ES varios_casos FIN CASOS \n"); };
@@ -341,7 +328,7 @@ clausula_iteracion: PARA IDENTIFICADOR EN expresion                             
 
 instruccion_interrupcion: SIGUIENTE ';'                                   { printf ("instruccion_interrupcion -> SIGUIENTE ;"); }
                         | SIGUIENTE CUANDO expresion ';'                  { printf ("instruccion_interrupcion -> SIGUIENTE CUANDO expresion ;"); }
-                        | SALIR                                           { printf ("instruccion_interrupcion -> SALIR"); }
+                        | SALIR ';'                                       { printf ("instruccion_interrupcion -> SALIR"); }
                         | SALIR DE IDENTIFICADOR CUANDO expresion ';'     { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR CUANDO expresion ;"); }
                         | SALIR DE IDENTIFICADOR ';'                      { printf ("instruccion_interrupcion -> SALIR DE IDENTIFICADOR ;"); }
                         | SALIR CUANDO ';'                                { printf ("instruccion_interrupcion -> SALIR CUANDO ;"); }
@@ -385,7 +372,7 @@ op_and: op_and AND op_negacion
       | op_negacion
       ;
 
-op_negacion: NEG op_comparacion
+op_negacion: '~' op_comparacion
            | op_comparacion
            ;
 
@@ -393,7 +380,7 @@ op_comparacion: op_desp '<' op_desp
               | op_desp '>' op_desp
               | op_desp LEQ op_desp
               | op_desp GEQ op_desp
-              | op_desp EQ op_desp
+              | op_desp '=' op_desp
               | op_desp NEQ op_desp
               | op_desp
               ;
@@ -411,9 +398,10 @@ op_sumaresta: op_sumaresta '+' op_multdiv
 op_multdiv: op_multdiv '*' op_potencia
           | op_multdiv '/' op_potencia
           | op_multdiv '\\' op_potencia
+          |op_potencia
           ;
 
-op_potencia: op_potencia POTENCIA expresion_posfija
+op_potencia: expresion_posfija '^' op_potencia
            | expresion_posfija
            ;
 
@@ -471,7 +459,7 @@ varias_clausulas_iteracion: varias_clausulas_iteracion clausula_iteracion  { pri
                           | clausula_iteracion                             { printf ("varias_clausulas_iteracion -> varias_clausulas_iteracion\n"); }
                           ;
 
-varias_expresiones: varias_expresiones expresion       { printf ("varias_expresiones ->  varias_expresiones expresion\n"); }
+varias_expresiones: varias_expresiones ',' expresion       { printf ("varias_expresiones ->  varias_expresiones expresion\n"); }
                   | expresion                              { printf ("varias_expresiones -> expresion\n"); }	 
                   ;
 
