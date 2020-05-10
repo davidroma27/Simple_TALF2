@@ -116,6 +116,7 @@ tipo_basico: BOOLEANO   { printf ("\ttipo_basico -> BOOLEANO \n"); }
 
 rango: expresion DOS_PUNTOS expresion                         { printf ("\trango -> expresion .. expresion\n"); }
      | expresion DOS_PUNTOS expresion DOS_PUNTOS expresion    { printf ("\trango -> expresion .. expresion .. expresion\n"); }
+     | error '\n'                                             { yyerrok;}
      ;
 
 tipo_tabla: TABLA '(' expresion DOS_PUNTOS expresion ')' DE especificacion_tipo     { printf ("\ttipo_tabla -> TABLA ( expresion .. expresion ) DE especificacion_tipo\n"); }
@@ -158,6 +159,7 @@ clase: CLASE ULTIMA superclases varias_declaraciones_componentes FIN CLASE  { pr
      | CLASE varias_declaraciones_componentes FIN CLASE                     { printf ("\tclase -> CLASE varias_declaraciones_componentes FIN CLASE \n"); }
      | CLASE ULTIMA  varias_declaraciones_componentes FIN CLASE             { printf ("\tclase -> CLASE ULTIMA  varias_declaraciones_componentes FIN CLASE \n"); }
      | CLASE  superclases varias_declaraciones_componentes FIN CLASE        { printf ("\tclase -> CLASE  superclases varias_declaraciones_componentes FIN CLASE \n"); }
+     | error '\n'                                                           { yyerrok;}
      ;
 
 varias_declaraciones_componentes: varias_declaraciones_componentes declaracion_componente     { printf ("\tvarias_declaraciones_componentes -> varias_declaraciones_componentes declaracion_componente  \n"); }
@@ -196,8 +198,6 @@ modificador: CONSTRUCTOR      { printf ("\tmodificador -> CONSTRUCTOR\n"); }
            | ESPECIFICO       { printf ("\tmodificador -> ESPECIFICO\n"); }
            | FINAL            { printf ("\tmodificador -> FINAL\n"); }
            ;
-
-
 
 /*******************************SUBPROGRAMAS********************************/
 
@@ -252,20 +252,22 @@ instruccion: instruccion_asignacion             { printf ("\tinstruccion -> inst
            | instruccion_lanzamiento_excepcion  { printf ("\tinstruccion -> instruccion_lanzamiento_excepcion\n"); }
            | instruccion_captura_excepcion      { printf ("\tinstruccion -> instruccion_captura_excepcion\n"); }
            | ';'                                { printf ("\tinstruccion -> ;\n"); }
+           | error '\n'                          { yyerrok;}
            ;
 
-instruccion_asignacion: objeto op_asignacion  expresion ';' { printf ("\tinstruccion_asignacion -> objeto op_asignacion expresion ;\n"); };
+instruccion_asignacion: objeto op_asignacion  expresion ';' { printf ("\tinstruccion_asignacion -> objeto op_asignacion expresion ;\n"); }
+                      ;
 
 op_asignacion: ASIGNACION
-  |ASIG_SUMA
-  |ASIG_DESPD
-  |ASIG_RESTA
-  |ASIG_DESPI
-  |ASIG_DIV
-  |ASIG_MULT
-  |ASIG_POT
-  |ASIG_RESTO
-  ;
+             | ASIG_SUMA
+             | ASIG_DESPD
+             | ASIG_RESTA
+             | ASIG_DESPI
+             | ASIG_DIV
+             | ASIG_MULT
+             | ASIG_POT
+             | ASIG_RESTO
+             ;
 
 instruccion_devolver: DEVOLVER ';'              { printf ("\tinstruccion_devolver -> DEVOLVER ;\n"); }
                     | DEVOLVER expresion ';'    { printf ("\tinstruccion_devolver -> DEVOLVER expresion ;\n"); }
@@ -340,6 +342,7 @@ instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN PRUEBA 
 clausulas: clausulas_excepcion                                            { printf ("\tclausulas -> clausulas_excepcion\n"); }
          | clausulas_excepcion clausula_finalmente                        { printf ("\tclausulas -> clausulas_excepcion clausula_finalmente\n"); }
          | clausula_finalmente                                            { printf ("\tclausulas -> clausula_finalmente\n"); }  
+         | error '\n'                                                     { yyerrok;}
          ;
 
 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general      { printf ("\tclausulas_excepcion -> varias_clausula_excepcion_especifica clausula_excepcion_general\n"); }
@@ -395,7 +398,7 @@ op_sumaresta: op_sumaresta '+' op_multdiv   { printf ("\top_sumaresta -> op_suma
 op_multdiv: op_multdiv '*' op_potencia      { printf ("\top_multdiv -> op_multdiv * op_potencia\n"); }
           | op_multdiv '/' op_potencia      { printf ("\top_multdiv -> op_multdiv / op_potencia\n"); }
           | op_multdiv '\\' op_potencia     { printf ("\top_multdiv -> op_multdiv \\ op_potencia\n"); }
-          |op_potencia                      { printf ("\top_multdiv -> op_potencia\n"); }
+          | op_potencia                     { printf ("\top_multdiv -> op_potencia\n"); }
           ;
 
 op_potencia: expresion_posfija '^' op_potencia    { printf ("\top_potencia -> expresion_posfija ^ op_potencia\n"); }

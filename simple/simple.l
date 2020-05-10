@@ -80,23 +80,16 @@ CARACTER '(%['"%nrt])'|'(%[oO][0-7]+)'|'(%(x|X)[0-9a-fA-F]+)'|'([%][0-2]?[0-5]?[
 (?i:valor)               printf("linea %d, palabra reservada: %s\n",yylineno,yytext);return(VALOR);
 (?i:verdadero)             printf("linea %d, palabra reservada: %s\n",yylineno,yytext);return(VERDADERO);
 
-{CARACTER} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );    return CTC_CARACTER;}
+{CARACTER} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext ); return CTC_CARACTER;}
            
-{ENTERO} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );
-            return CTC_ENTERA;
-         }
+{ENTERO} {printf( "linea %d, ctc entera: %s\n", yylineno, yytext );return CTC_ENTERA;}
          
-{REAL_O} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return CTC_REAL;
-         }
+{REAL_O} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );return CTC_REAL;}
          
-{REAL_X} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return CTC_REAL;
-         }
+{REAL_X} {printf( "linea %d, ctc real: %s\n", yylineno, yytext ); return CTC_REAL;}
          
-{REAL_ENT} {printf( "linea %d, ctc real: %s\n", yylineno, yytext );
-            return CTC_REAL;
-           }
+{REAL_ENT} {printf( "linea %d, ctc real: %s\n", yylineno, yytext ); return CTC_REAL;}
+
 \.\. {return DOS_PUNTOS;}
 :: {return CUATRO_PUNTOS;}
 := {return ASIGNACION;}
@@ -119,21 +112,14 @@ CARACTER '(%['"%nrt])'|'(%[oO][0-7]+)'|'(%(x|X)[0-9a-fA-F]+)'|'([%][0-2]?[0-5]?[
 :\< {return ASIG_DESPI;}
 :\> {return ASIG_DESPD;}
 
-{OPERADOR} {printf( "linea %d, operador: %s\n", yylineno, yytext );
-            return yytext[0];
-           }
+{OPERADOR} {printf( "linea %d, operador: %s\n", yylineno, yytext ); return yytext[0];}
            
-{DELIM} {printf( "linea %d, delimitador: %s\n", yylineno, yytext );
-            return yytext[0];
-        }
+{DELIM} {printf( "linea %d, delimitador: %s\n", yylineno, yytext ); return yytext[0];}
 
-{ID} {printf( "linea %d, identificador: %s\n", yylineno, yytext );
-        return IDENTIFICADOR;
-     }
+{ID} {printf( "linea %d, identificador: %s\n", yylineno, yytext ); return IDENTIFICADOR;}
      
-{CADENA} {printf( "linea %d, cadena: %s\n", yylineno, yytext );
-            return CTC_CADENA;
-         }
+{CADENA} {printf( "linea %d, cadena: %s\n", yylineno, yytext ); return CTC_CADENA;}
+
 (\t|" ")+    ;
 \n { }
 
