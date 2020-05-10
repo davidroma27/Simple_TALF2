@@ -47,11 +47,12 @@ libreria: IMPORTAR LIBRERIA nombre ';'                              { printf ("\
         ;
 
 varios_identificadores: varios_identificadores ',' IDENTIFICADOR    { printf ("\tvarios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
-                      | IDENTIFICADOR                               { printf ("\tvarios_identificadores -> IDENTIFICADOR\n"); }                      
+                      | IDENTIFICADOR                               { printf ("\tvarios_identificadores -> IDENTIFICADOR\n"); }
                       ;
 
 nombre: nombre CUATRO_PUNTOS IDENTIFICADOR                          { printf ("\tnombre -> nombre :: IDENTIFICADOR\n");} 
       | IDENTIFICADOR                                               { printf ("\tnombre -> IDENTIFICADOR\n");} 
+      | error '\n'                                                  { yyerrok;} 
       ;
 
 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria         { printf ("\tdefinicion_libreria -> LIBRERIA IDENTIFICADOR ; codigo_libreria\n");};
@@ -227,7 +228,9 @@ modo: VALOR                      { printf ("\tmodo -> VALOR\n"); }
 
 tipo_resultado: DEVOLVER especificacion_tipo      { printf ("\ttipo_resultado -> DEVOLVER especificacion_tipo\n"); };
 
-cuerpo_subprograma:  varias_declaraciones PRINCIPIO varias_instrucciones FIN    { printf ("\tcuerpo_subprograma -> varias_declaraciones PRINCIPIO varias_instrucciones FIN\n"); };
+cuerpo_subprograma:  varias_declaraciones PRINCIPIO varias_instrucciones FIN    { printf ("\tcuerpo_subprograma -> varias_declaraciones PRINCIPIO varias_instrucciones FIN\n"); }
+                  | error '\n'                                                  { yyerrok;}
+                  ;
 
 varias_declaraciones: varias_declaraciones declaracion       { printf ("\tvarias_declaraciones -> varias_declaraciones declaracion\n"); }
                     |
