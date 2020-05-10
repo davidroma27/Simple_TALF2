@@ -50,6 +50,7 @@ programa: definicion_programa { printf ("programa -> definicion_programa \n"); }
 
 varios_identificadores: varios_identificadores ',' IDENTIFICADOR  { printf ("varios_identificadores -> varios_identificadores , IDENTIFICADOR \n"); }
                       | IDENTIFICADOR  { printf ("varios_identificadores -> IDENTIFICADOR\n"); }
+                      | IDENTIFICADOR DOS_PUNTOS    { printf ("varios_identificadores -> varios_identificadores IDENTIFICADOR DOS_PUNTOS\n"); }
                       ;
 
 varias_librerias: varias_librerias libreria { printf ("varias_librerias -> varias_librerias libreria \n"); }
@@ -65,11 +66,7 @@ libreria: IMPORTAR LIBRERIA nombre ';'                              { printf ("l
         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'    { printf ("libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
         ;
 
-cero_o_masID:  cero_o_masID IDENTIFICADOR DOS_PUNTOS    { printf ("cero_o_masID -> cero_o_masID IDENTIFICADOR DOS_PUNTOS\n"); }
-            | 
-            ;
-
-nombre:  cero_o_masID IDENTIFICADOR     { printf ("nombre -> cero_o_masID IDENTIFICADOR\n"); };
+nombre:  varios_identificadores IDENTIFICADOR     { printf ("nombre -> cero_o_masID IDENTIFICADOR\n"); };
 
 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria;
 
@@ -389,16 +386,11 @@ expresion: expresion_potencia
          | expresion_condicional
          ;
 
-expresion_binaria: expresion op_binario expresion    { printf ("expresion_binaria ->  expresion operador_binario expresion\n"); }
-                 ;
+expresion_binaria: expresion op_binario expresion    { printf ("expresion_binaria ->  expresion operador_binario expresion\n"); };	                 
 
-expresion_potencia: expresion_posfija                        { printf ("expresion_potencia ->  expresion_posfija\n"); }
-                  | expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); }
-                  ;
+expresion_potencia: expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); };
 
-expresion_posfija: expresion_unaria                   { printf ("expresion_posfija -> expresion_unaria\n"); }
-                 | expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
-                 ;
+expresion_posfija: expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); };
 
 operador_posfijo: INC		{ printf ("operador posfijo -> INC\n"); } 
                 | DEC		{ printf ("operador posfijo -> DEC\n"); }
