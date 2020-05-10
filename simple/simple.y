@@ -249,7 +249,7 @@ cuerpo_subprograma:  varias_declaraciones PRINCIPIO varias_instrucciones FIN    
 
 /* declaracion esta declarada en la seccion de programa */
 /* se declara aqui varias_declaraciones para la regla cuerpo_subprograma */
-varias_declaraciones: varias_declaraciones declaracion       { printf ("varias_declaraciones -> varias_declaraciones declaracion\n"); }
+varias_declaraciones: declaracion varias_declaraciones        { printf ("varias_declaraciones -> varias_declaraciones declaracion\n"); }
                     |
                     ;
 
@@ -392,12 +392,10 @@ expresion: expresion_potencia
 expresion_binaria: expresion op_binario expresion    { printf ("expresion_binaria ->  expresion operador_binario expresion\n"); }
                  ;
 
-expresion_potencia: expresion_posfija                        { printf ("expresion_potencia ->  expresion_posfija\n"); }
-                  | expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); }
+expresion_potencia: expresion_posfija '^' expresion_potencia { printf ("expresion_potencia ->  expresion_posfija '^' expresion_potencia\n"); }
                   ;
 
-expresion_posfija: expresion_unaria                   { printf ("expresion_posfija -> expresion_unaria\n"); }
-                 | expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
+expresion_posfija: expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
                  ;
 
 operador_posfijo: INC		{ printf ("operador posfijo -> INC\n"); } 
