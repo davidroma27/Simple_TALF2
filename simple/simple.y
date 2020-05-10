@@ -377,8 +377,7 @@ clausula_finalmente: FINALMENTE varias_instrucciones        { printf ("clausula_
 /*******************************EXPRESIONES********************************/
 
 expresion: expresion_binaria
-         | expresion_posfija
-         | expresion_unaria
+         | expresion_posfija        
          | expresion_condicional
          ;
                       
@@ -396,11 +395,11 @@ expresion_binaria: expresion '+' expresion
                  | expresion EQ expresion
                  ;
 
-expresion_posfija: expresion_unaria operador_posfijo	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); };
+expresion_posfija: expresion_unaria INC	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
+                  |expresion_unaria DEC	{ printf ("expresion_posfija -> expresion_unaria operador_posfijo\n"); }
+                  |expresion_unaria
+;
 
-operador_posfijo: INC		{ printf ("operador posfijo -> INC\n"); } 
-                | DEC		{ printf ("operador posfijo -> DEC\n"); }
-                ;
 
 expresion_unaria: primario			{ printf ("expresion unaria -> primario\n"); }
                 | '-' primario	{ printf ("expresion unaria -> '-' primario\n"); }
